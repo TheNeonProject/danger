@@ -27,8 +27,7 @@ module Danger
       exists = [
         "GITLAB_CI", "CI_PROJECT_PATH"
       ].all? { |x| env[x] }
-
-      exists && determine_merge_request_id(env).to_i > 0
+      exists
     end
 
     def self.determine_merge_request_id(env)
@@ -37,14 +36,15 @@ module Danger
 
       project_path = env["CI_MERGE_REQUEST_PROJECT_PATH"] || env["CI_PROJECT_PATH"]
       base_commit = env["CI_COMMIT_SHA"]
-      client = RequestSources::GitLab.new(nil, env).client
+      # client = RequestSources::GitLab.new(nil, env).client
 
-      merge_requests = client.merge_requests(project_path, state: :opened)
-      merge_request = merge_requests.auto_paginate.find do |mr|
-        mr.sha == base_commit
-      end
+      # merge_requests = client.merge_requests(project_path, state: :opened)
+      # merge_request = merge_requests.auto_paginate.find do |mr|
+      #   mr.sha == base_commit
+      # end
 
-      merge_request.nil? ? 0 : merge_request.iid
+      # merge_request.nil? ? 0 : merge_request.iid
+      env['CI_COMMIT_REF_NAME']
     end
 
     def initialize(env)
@@ -54,11 +54,11 @@ module Danger
     end
 
     def supported_request_sources
-      @supported_request_sources ||= [Danger::RequestSources::GitLab]
+      @supported_request_sources ||= [Danger::RequestSources::GitLab, Danger::RequestSources::GitHub]
     end
 
     def pull_request_id
-      @pull_request_id ||= self.class.determine_merge_request_id(@env)
+      @pull_request_id ||= 186
     end
   end
 end
