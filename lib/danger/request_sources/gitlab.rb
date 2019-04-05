@@ -128,7 +128,8 @@ module Danger
       end
 
       def fetch_details
-        self.mr_json = client.merge_request(ci_source.repo_slug, self.ci_source.pull_request_id)
+        # self.mr_json = client.merge_request(ci_source.repo_slug, self.ci_source.pull_request_id)
+        self.mr_json = "[]"
         self.ignored_violations = ignored_violations_from_pr
       end
 
@@ -215,7 +216,7 @@ module Danger
               client.edit_merge_request_note(ci_source.repo_slug, ci_source.pull_request_id, last_comment.id, body)
             end
         end
-        
+
       end
 
       def update_pull_request_without_inline_comments!(warnings: [], errors: [], messages: [], markdowns: [], danger_id: "danger", new_comment: false, remove_previous_comments: false)
@@ -430,7 +431,7 @@ module Danger
             rescue Gitlab::Error::Error => e
               message = [e, "body: #{body}"].join("\n")
               puts message
-              
+
               next false
             end
           end
