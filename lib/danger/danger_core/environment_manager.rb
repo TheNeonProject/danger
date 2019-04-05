@@ -27,15 +27,21 @@ module Danger
 
     def initialize(env, ui = nil)
       ci_klass = self.class.local_ci_source(env)
+      puts('HOLI')
+      puts(ci_klass)
       self.ci_source = ci_klass.new(env)
       self.ui = ui || Cork::Board.new(silent: false, verbose: false)
 
       RequestSources::RequestSource.available_request_sources.each do |klass|
         next unless self.ci_source.supports?(klass)
+        puts(self.ci_source.supports?(klass))
 
         request_source = klass.new(self.ci_source, env)
+        puts(request_source)
         next unless request_source.validates_as_ci?
+        puts(request_source.validates_as_ci?)
         next unless request_source.validates_as_api_source?
+        puts(request_source.validates_as_api_source?)
         self.request_source = request_source
       end
 
