@@ -43,7 +43,7 @@ module Danger
         ui.puts request_source
         ui.puts request_source.validates_as_ci?
         ui.puts request_source.validates_as_api_source?
-        next unless request_source.validates_as_ci?
+        # next unless request_source.validates_as_ci?
         next unless request_source.validates_as_api_source?
         self.request_source = request_source
       end
