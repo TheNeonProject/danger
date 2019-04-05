@@ -1,6 +1,7 @@
 # http://docs.gitlab.com/ce/ci/variables/README.html
 require "uri"
 require "danger/request_sources/gitlab"
+require "danger/request_sources/github/github"
 
 module Danger
   # ### CI Setup
@@ -58,7 +59,10 @@ module Danger
     end
 
     def pull_request_id
-      @pull_request_id ||= 186
+      branch_name = @env["CI_COMMIT_REF_NAME"]
+      owner = @env["CI_PROJECT_PATH"].split("/")[0]
+      repo_name = @env["CI_PROJECT_PATH"]
+      @pull_request_id ||= Danger::RequestSources::GitHub.new(nil, @env).get_pr_from_branch(repo_name, branch_name, owner)
     end
   end
 end
