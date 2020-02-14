@@ -28,7 +28,7 @@ module Danger
     end
 
     def self.validates_as_pr?(env)
-      env["GITHUB_EVENT_NAME"] == "pull_request"
+       ["pull_request", "push"].include? env["GITHUB_EVENT_NAME"]
     end
 
     def supported_request_sources
